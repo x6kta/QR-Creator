@@ -28,8 +28,8 @@ pip install qrcode
 1. Create a directory to import the whole project like this:
 
     ```sh
-    mkdir <your own directory>
-    cd <your own directory>
+    mkdir "your own directory"
+    cd "your own directory"
     ```
 3. Clone the project:
     ```sh
