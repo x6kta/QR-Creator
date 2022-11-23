@@ -12,42 +12,40 @@ def generate_QR_code(text, file_name):
 # Obtiene el tamaño del archivo generado
 def get_size_file(file_name):
     file_size = os.stat(f"{file_name}.png").st_size
-    file_size_kB = humanize.naturalsize(file_size)
-    return file_size_kB
+    file_size_readable = humanize.naturalsize(file_size) 
+    return file_size_readable
 
-# Nombre del archivo
-text = input("Ingrese el URL o texto que desea convertir a QR\n> ")
-need_file_name = input("¿Quiere agregar un nombre personalizado a su archivo? (Ingrese Y para sí, cualquier tecla para no)\n> ")
+# Devolver que todo ha sido exitoso
+def success(text, file_name):
+    size_file = get_size_file(file_name)
+    print("QR code has been generated succesfully!") 
+    print(f"* File created: {file_name}.png\n* Based on: {text}\n* Size: {size_file}")
 
-try:
-    if need_file_name == "y" or need_file_name == "Y":
-        # Nombre del archivo
-        file_name = input("Ingrese el nombre del archivo que será convertido en un código QR:\n> ")
-        generate_QR_code(text, file_name)
-        
-        # Se ha generado el QR
+def main():
+    # Nombre del archivo
+    try:
+        text = input("Type the URL or plain text that you'll convert into a QR Code:\n> ")
+        need_file_name = input("Do you want a custom name to your QR code?\n(Type 'Y' for Yes, another key to not add a custom name.)\n> ")
+        if need_file_name == "Y" or need_file_name == "y":
+            # Nombre del archivo
+            file_name = input("Ingrese el nombre del archivo que será convertido en un código QR:\n> ")
+            generate_QR_code(text, file_name)
+
+            # Se ha generado el QR
+            os.system("clear")
+            success(text, file_name)
+        else:
+            os.system("clear")
+            hash = hashlib.md5(text.encode()).hexdigest()
+            print(hash)
+            generate_QR_code(text, hash)
+
+            os.system("clear")
+            success(text, hash)       
+    except KeyboardInterrupt:
         os.system("clear")
-        print("QR code has been generated succesfully!") 
-        print(f"* File created: {file_name}.png\n* Based on: {text}\n* Size: {get_size_file(file_name)}")
-    else:
-        os.system("clear")
-        print("Cannot hash yet!")
+        print("Program finished succesfully by an KeyboardInterruption. (Ctrl + C hass been pressed)")
+        exit()
 
-except KeyboardInterrupt:
-    os.system("clear")
-    print("Interrupted by user")
-    exit()
-
-
-# Hash
-# hash = hashlib.md5()
-# hash.update(b"https://woolly-honesty-57c.notion.site/E-Garay-d3b54df238a9431694d41f5f2c0a5b79")
-
-
-
-# Imagen con el nombre del hash
-#img.save(f"{hash.hexdigest()}.png")
-
-
-# Test
-# print(f"{hash.name}: {hash.hexdigest()}")
+if __name__ == "__main__":
+    main()
